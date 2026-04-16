@@ -16,4 +16,9 @@ registerInitCommand(program);
 registerCheckCommand(program);
 registerStatusCommand(program);
 
+program.addHelpText(
+  "after",
+  "\nSet ANTHROPIC_API_KEY for LLM-powered features (intent analysis, alignment checks).",
+);
+
 program.parse();
