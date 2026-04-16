@@ -3,10 +3,6 @@ import { join } from "node:path";
 import { homedir } from "node:os";
 import type { PortfolioEntry } from "../detectors/types.js";
 
-interface ProjectsFile {
-  projects: PortfolioEntry[];
-}
-
 function getDefaultConfigDir(): string {
   return join(homedir(), ".omamori");
 }
@@ -20,17 +16,20 @@ export function registerProject(
   mkdirSync(dir, { recursive: true });
 
   const filePath = join(dir, "projects.json");
-  let data: ProjectsFile = { projects: [] };
+  let entries: PortfolioEntry[] = [];
 
   if (existsSync(filePath)) {
     try {
-      data = JSON.parse(readFileSync(filePath, "utf-8")) as ProjectsFile;
+      const raw = JSON.parse(readFileSync(filePath, "utf-8")) as
+        | PortfolioEntry[]
+        | { projects: PortfolioEntry[] };
+      entries = Array.isArray(raw) ? raw : raw.projects ?? [];
     } catch {
-      data = { projects: [] };
+      entries = [];
     }
   }
 
-  const existingIndex = data.projects.findIndex((p) => p.path === projectPath);
+  const existingIndex = entries.findIndex((p) => p.path === projectPath);
   const entry: PortfolioEntry = {
     name,
     path: projectPath,
@@ -38,10 +37,10 @@ export function registerProject(
   };
 
   if (existingIndex >= 0) {
-    data.projects[existingIndex] = entry;
+    entries[existingIndex] = entry;
   } else {
-    data.projects.push(entry);
+    entries.push(entry);
   }
 
-  writeFileSync(filePath, JSON.stringify(data, null, 2));
+  writeFileSync(filePath, JSON.stringify(entries, null, 2) + "\n");
 }

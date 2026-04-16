@@ -49,20 +49,16 @@ export function generateManifest(
 
   const manifest = {
     name: projectName,
-    url: detection.url.url,
-    intent: {
-      description: resolvedIntent.description,
-      goals: resolvedIntent.goals,
-      non_goals: resolvedIntent.non_goals,
-      invariants: resolvedIntent.invariants,
-      trust_boundaries: resolvedIntent.trust_boundaries,
-    },
+    description: resolvedIntent.description,
+    goals: resolvedIntent.goals,
+    non_goals: resolvedIntent.non_goals,
+    invariants: resolvedIntent.invariants,
+    trust_boundaries: resolvedIntent.trust_boundaries,
     infrastructure: {
-      framework: detection.framework.framework,
+      repo,
       hosting: detection.hosting.hosting,
       database: detection.database.database,
-      auth: detection.auth.auth,
-      repo,
+      apis: detection.apis.apis.length > 0 ? detection.apis.apis : [],
     },
     cost_budget: {
       monthly_max: null,

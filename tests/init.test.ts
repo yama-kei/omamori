@@ -71,7 +71,7 @@ describe("omamori init (integration)", () => {
       env: { ...process.env, ANTHROPIC_API_KEY: "" },
     });
 
-    const data = JSON.parse(readFileSync(join(configDir, "projects.json"), "utf-8")) as { projects: unknown[] };
-    expect(data.projects).toHaveLength(1);
+    const entries = JSON.parse(readFileSync(join(configDir, "projects.json"), "utf-8")) as unknown[];
+    expect(entries).toHaveLength(1);
   });
 });

@@ -19,14 +19,13 @@ describe("registerProject", () => {
     tempDir = makeTempDir();
     registerProject("my-app", "/home/user/projects/my-app", tempDir);
 
-    const data = JSON.parse(readFileSync(join(tempDir, "projects.json"), "utf-8")) as {
-      projects: { name: string; path: string; onboardedAt: string }[];
-    };
+    const entries = JSON.parse(readFileSync(join(tempDir, "projects.json"), "utf-8")) as
+      { name: string; path: string; onboardedAt: string }[];
 
-    expect(data.projects).toHaveLength(1);
-    expect(data.projects[0].name).toBe("my-app");
-    expect(data.projects[0].path).toBe("/home/user/projects/my-app");
-    expect(data.projects[0].onboardedAt).toBeTruthy();
+    expect(entries).toHaveLength(1);
+    expect(entries[0].name).toBe("my-app");
+    expect(entries[0].path).toBe("/home/user/projects/my-app");
+    expect(entries[0].onboardedAt).toBeTruthy();
   });
 
   it("appends a new entry to an existing projects.json", () => {
@@ -34,12 +33,11 @@ describe("registerProject", () => {
     registerProject("app-one", "/home/user/projects/app-one", tempDir);
     registerProject("app-two", "/home/user/projects/app-two", tempDir);
 
-    const data = JSON.parse(readFileSync(join(tempDir, "projects.json"), "utf-8")) as {
-      projects: { name: string; path: string; onboardedAt: string }[];
-    };
+    const entries = JSON.parse(readFileSync(join(tempDir, "projects.json"), "utf-8")) as
+      { name: string; path: string; onboardedAt: string }[];
 
-    expect(data.projects).toHaveLength(2);
-    expect(data.projects.map((p) => p.name)).toEqual(["app-one", "app-two"]);
+    expect(entries).toHaveLength(2);
+    expect(entries.map((p) => p.name)).toEqual(["app-one", "app-two"]);
   });
 
   it("updates (not duplicates) an existing entry when same path is registered again", () => {
@@ -47,12 +45,11 @@ describe("registerProject", () => {
     registerProject("my-app", "/home/user/projects/my-app", tempDir);
     registerProject("my-app", "/home/user/projects/my-app", tempDir);
 
-    const data = JSON.parse(readFileSync(join(tempDir, "projects.json"), "utf-8")) as {
-      projects: { name: string; path: string; onboardedAt: string }[];
-    };
+    const entries = JSON.parse(readFileSync(join(tempDir, "projects.json"), "utf-8")) as
+      { name: string; path: string; onboardedAt: string }[];
 
-    expect(data.projects).toHaveLength(1);
-    expect(data.projects[0].path).toBe("/home/user/projects/my-app");
+    expect(entries).toHaveLength(1);
+    expect(entries[0].path).toBe("/home/user/projects/my-app");
   });
 
   it("updates name when path matches but name differs", () => {
@@ -60,12 +57,11 @@ describe("registerProject", () => {
     registerProject("old-name", "/home/user/projects/my-app", tempDir);
     registerProject("new-name", "/home/user/projects/my-app", tempDir);
 
-    const data = JSON.parse(readFileSync(join(tempDir, "projects.json"), "utf-8")) as {
-      projects: { name: string; path: string; onboardedAt: string }[];
-    };
+    const entries = JSON.parse(readFileSync(join(tempDir, "projects.json"), "utf-8")) as
+      { name: string; path: string; onboardedAt: string }[];
 
-    expect(data.projects).toHaveLength(1);
-    expect(data.projects[0].name).toBe("new-name");
-    expect(data.projects[0].path).toBe("/home/user/projects/my-app");
+    expect(entries).toHaveLength(1);
+    expect(entries[0].name).toBe("new-name");
+    expect(entries[0].path).toBe("/home/user/projects/my-app");
   });
 });

@@ -58,20 +58,16 @@ describe("generateManifest", () => {
     const manifest = yamlParse(raw) as Record<string, unknown>;
 
     expect(manifest.name).toBe("my-app");
-    expect(manifest.url).toBe("https://my-app.vercel.app");
-
-    const intent = manifest.intent as Record<string, unknown>;
-    expect(intent.description).toBe("A SaaS app for managing subscriptions");
-    expect(intent.goals).toEqual(["Provide subscription management", "Send invoices automatically"]);
-    expect(intent.non_goals).toEqual(["Build a payment processor"]);
-    expect(intent.invariants).toEqual(["All payments must be logged"]);
-    expect(intent.trust_boundaries).toEqual(["External payment APIs are untrusted"]);
+    expect(manifest.description).toBe("A SaaS app for managing subscriptions");
+    expect(manifest.goals).toEqual(["Provide subscription management", "Send invoices automatically"]);
+    expect(manifest.non_goals).toEqual(["Build a payment processor"]);
+    expect(manifest.invariants).toEqual(["All payments must be logged"]);
+    expect(manifest.trust_boundaries).toEqual(["External payment APIs are untrusted"]);
 
     const infrastructure = manifest.infrastructure as Record<string, unknown>;
-    expect(infrastructure.framework).toBe("nextjs");
     expect(infrastructure.hosting).toBe("vercel");
     expect(infrastructure.database).toBe("supabase");
-    expect(infrastructure.auth).toBe("next-auth");
+    expect(infrastructure.apis).toEqual(["stripe"]);
 
     const costBudget = manifest.cost_budget as Record<string, unknown>;
     expect(costBudget.monthly_max).toBeNull();
@@ -93,13 +89,12 @@ describe("generateManifest", () => {
     const raw = readFileSync(manifestPath, "utf-8");
     const manifest = yamlParse(raw) as Record<string, unknown>;
 
-    const intent = manifest.intent as Record<string, unknown>;
-    expect(intent.description).toBe("TODO: Add project description");
-    expect(Array.isArray(intent.goals)).toBe(true);
-    expect((intent.goals as string[])[0]).toContain("TODO");
-    expect(Array.isArray(intent.non_goals)).toBe(true);
-    expect(Array.isArray(intent.invariants)).toBe(true);
-    expect(Array.isArray(intent.trust_boundaries)).toBe(true);
+    expect(manifest.description).toBe("TODO: Add project description");
+    expect(Array.isArray(manifest.goals)).toBe(true);
+    expect((manifest.goals as string[])[0]).toContain("TODO");
+    expect(Array.isArray(manifest.non_goals)).toBe(true);
+    expect(Array.isArray(manifest.invariants)).toBe(true);
+    expect(Array.isArray(manifest.trust_boundaries)).toBe(true);
   });
 
   it("sets infrastructure.repo to null for a temp dir (no git remote)", () => {
