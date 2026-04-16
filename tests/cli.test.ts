@@ -28,9 +28,14 @@ describe("omamori CLI", () => {
     expect(output).toBe("0.1.0");
   });
 
-  it("check prints placeholder", () => {
-    const output = run("check");
-    expect(output).toBe("omamori check — not implemented yet");
+  it("check errors without omamori.yaml", () => {
+    try {
+      run("check", "--dir", "/tmp/nonexistent-dir-for-test");
+      expect.unreachable("should have thrown");
+    } catch (err) {
+      const stderr = (err as { stderr: string }).stderr;
+      expect(stderr).toContain("omamori.yaml not found");
+    }
   });
 
   it("status prints placeholder", () => {

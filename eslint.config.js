@@ -13,6 +13,8 @@ export default [
       globals: {
         console: "readonly",
         process: "readonly",
+        fetch: "readonly",
+        AbortSignal: "readonly",
       },
     },
     plugins: {
