@@ -61,7 +61,7 @@ export function generateGraph(projectDir: string, detection: DetectionResult): v
 
   // Read dependencies from package.json
   const dependencies: GraphDependency[] = [];
-  let pkg: PackageJson | null = null;
+  let pkg: PackageJson | null;
 
   try {
     const content = readFileSync(join(projectDir, "package.json"), "utf-8");
