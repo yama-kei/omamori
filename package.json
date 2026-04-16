@@ -9,7 +9,9 @@
   },
   "scripts": {
     "build": "tsc",
+    "postbuild": "chmod +x dist/cli.js",
     "dev": "tsx src/cli.ts",
+    "pretest": "tsc",
     "test": "vitest run",
     "lint": "eslint src/ tests/"
   },
