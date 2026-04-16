@@ -4,6 +4,9 @@
   "description": "Your app sitter — health monitoring for personal software",
   "license": "MIT",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "bin": {
     "omamori": "./dist/cli.js"
   },
