@@ -38,9 +38,9 @@ describe("omamori CLI", () => {
     }
   });
 
-  it("status prints placeholder", () => {
-    const output = run("status");
-    expect(output).toBe("omamori status — not implemented yet");
+  it("status shows empty portfolio message when no projects", () => {
+    const output = run("status", "--config-dir", "/tmp/nonexistent-config-dir");
+    expect(output).toContain("No projects onboarded");
   });
 });
 

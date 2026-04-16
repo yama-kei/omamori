@@ -7,6 +7,22 @@ function getDefaultConfigDir(): string {
   return join(homedir(), ".omamori");
 }
 
+export function loadProjects(configDir?: string): PortfolioEntry[] {
+  const dir = configDir ?? getDefaultConfigDir();
+  const filePath = join(dir, "projects.json");
+
+  if (!existsSync(filePath)) return [];
+
+  try {
+    const raw = JSON.parse(readFileSync(filePath, "utf-8")) as
+      | PortfolioEntry[]
+      | { projects: PortfolioEntry[] };
+    return Array.isArray(raw) ? raw : raw.projects ?? [];
+  } catch {
+    return [];
+  }
+}
+
 export function registerProject(
   name: string,
   projectPath: string,
