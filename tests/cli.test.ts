@@ -1,7 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { execFileSync } from "node:child_process";
-import { resolve, dirname } from "node:path";
+import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const cli = resolve(__dirname, "../dist/cli.js");
@@ -26,11 +28,6 @@ describe("omamori CLI", () => {
     expect(output).toBe("0.1.0");
   });
 
-  it("init prints placeholder", () => {
-    const output = run("init");
-    expect(output).toBe("omamori init — not implemented yet");
-  });
-
   it("check prints placeholder", () => {
     const output = run("check");
     expect(output).toBe("omamori check — not implemented yet");
@@ -39,5 +36,25 @@ describe("omamori CLI", () => {
   it("status prints placeholder", () => {
     const output = run("status");
     expect(output).toBe("omamori status — not implemented yet");
+  });
+});
+
+describe("omamori init", () => {
+  let dir: string;
+
+  beforeEach(() => {
+    dir = mkdtempSync(join(tmpdir(), "omamori-cli-test-"));
+  });
+
+  afterEach(() => {
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it("runs init and creates omamori.yaml", () => {
+    const output = execFileSync("node", [cli, "init", "--dir", dir], {
+      encoding: "utf-8",
+      env: { ...process.env, ANTHROPIC_API_KEY: "" },
+    });
+    expect(output).toContain("omamori.yaml");
   });
 });
