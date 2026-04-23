@@ -46,20 +46,27 @@ describe("omamori CLI", () => {
 
 describe("omamori init", () => {
   let dir: string;
+  let configDir: string;
 
   beforeEach(() => {
     dir = mkdtempSync(join(tmpdir(), "omamori-cli-test-"));
+    configDir = mkdtempSync(join(tmpdir(), "omamori-cli-config-"));
   });
 
   afterEach(() => {
     rmSync(dir, { recursive: true, force: true });
+    rmSync(configDir, { recursive: true, force: true });
   });
 
   it("runs init and creates omamori.yaml", () => {
-    const output = execFileSync("node", [cli, "init", "--dir", dir], {
-      encoding: "utf-8",
-      env: { ...process.env, ANTHROPIC_API_KEY: "" },
-    });
+    const output = execFileSync(
+      "node",
+      [cli, "init", "--dir", dir, "--config-dir", configDir],
+      {
+        encoding: "utf-8",
+        env: { ...process.env, ANTHROPIC_API_KEY: "" },
+      },
+    );
     expect(output).toContain("omamori.yaml");
   });
 });
